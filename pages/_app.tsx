@@ -1,4 +1,4 @@
-import { GetServerSideProps } from "next";
+import "bootstrap/dist/css/bootstrap.css";
 import { AppProps } from "next/app";
 import "../styles/globals.css";
 
