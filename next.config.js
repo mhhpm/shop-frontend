@@ -1,4 +1,6 @@
-export const reactStrictMode = true
-export const images = {
-  domains: ['dummyimage.com'],
+module.exports = {
+  reactStrictMode: true,
+  images: {
+    domains: ['dummyimage.com'],
+  },
 }

@@ -1,15 +1,19 @@
+import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { ReactNode } from 'react'
 import Footer from './Footer'
 import Header from './Header'
 
+const RequireLogin = dynamic(() => import('./RequireLogin'), { ssr: false })
+
 type Props = {
   title: string
   children: ReactNode
-} & (
-  | { requireLogin: true; header?: boolean; footer?: boolean }
-  | { requireLogin?: false; header: false; footer: false }
-)
+} & {
+  requireLogin?: boolean
+  header?: boolean
+  footer?: boolean
+}
 
 function Layout({ children, title, requireLogin, header, footer }: Props) {
   return (
@@ -17,9 +21,10 @@ function Layout({ children, title, requireLogin, header, footer }: Props) {
       <Head>
         <title>{title}</title>
       </Head>
-      {!requireLogin && <>{header && <Header key="header" />}</>}
+      {requireLogin && <RequireLogin />}
+      {header && <Header key="header" />}
       <main>{children}</main>
-      {!requireLogin && <>{footer && <Footer key="footer" />}</>}
+      {footer && <Footer key="footer" />}
     </div>
   )
 }
