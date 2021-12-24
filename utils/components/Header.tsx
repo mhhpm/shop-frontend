@@ -1,10 +1,14 @@
 import { HeaderData } from '@utils/data/header-data'
+import { getAvatarUrl } from '@utils/libs/helpers'
+import { IUser } from '@utils/types/user'
 import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
-import { Badge, Button, Container, Nav, Navbar } from 'react-bootstrap'
+import { Badge, Button, Container, Image, Nav, Navbar } from 'react-bootstrap'
 import styled from 'styled-components'
+import Options from './options'
+import { OptionItem } from './options/style'
 
 export const HeaderStyle = styled(Navbar)`
   padding-left: 24px;
@@ -42,6 +46,8 @@ const Header = () => {
   const { data: session } = useSession()
   const { pathname, push } = useRouter()
   const splitPath = useMemo(() => pathname.split('/'), [pathname])
+
+  console.log('seesion', session)
   return (
     <HeaderStyle
       bg="light"
@@ -77,9 +83,33 @@ const Header = () => {
               </Badge>
             </Button>
             {session ? (
-              <button onClick={() => signOut()}>Log Out</button>
+              <>
+                <Options
+                  icon={
+                    <Image
+                      src={getAvatarUrl(`${session.user?.name}`)}
+                      width={32}
+                      className="opt-image"
+                    />
+                  }
+                  className="position-relative user mx-2"
+                >
+                  <Link href={`/user/${session.id}`}>
+                    <OptionItem>
+                      <i className="bi bi-person-lines-fill fs-5 me-3" /> Hồ sơ
+                      của tôi
+                    </OptionItem>
+                  </Link>
+                  {/* <hr className="border mb-1 border-secondary" /> */}
+                  <OptionItem onClick={() => signOut()}>
+                    <i className="bi bi-box-arrow-right fs-5 me-3" /> Đăng xuất
+                  </OptionItem>
+                </Options>
+              </>
             ) : (
-              <button onClick={() => push('/auth/login')}>Log In</button>
+              <Button variant="dark" onClick={() => push('/auth/login')}>
+                Đăng nhập
+              </Button>
             )}
           </div>
         </Navbar.Collapse>

@@ -8,7 +8,7 @@ import { Container, Form, Row, Stack } from 'react-bootstrap'
 import toast from 'react-hot-toast'
 import styled from 'styled-components'
 
-const LoginContainer = styled(Container)`
+export const LoginContainer = styled(Container)`
   max-width: 480px;
   @media (max-width: 500px) {
     max-width: 95%;
@@ -46,7 +46,7 @@ const Login = () => {
   }, [query])
 
   return (
-    <Layout title="Book Shop | Login">
+    <Layout title="Book Shop | Đăng nhập">
       <div className="d-flex align-items-center h-100">
         <LoginContainer className="border rounded-3 px-4 py-5 shadow bg-body d-flex">
           <Stack>
@@ -89,7 +89,7 @@ const Login = () => {
                 </Form.Group>
                 <Form.Group className="mt-3 text-center">
                   Chưa có tài khoản?
-                  <Link href="/register">
+                  <Link href="/auth/register">
                     <a className="text-secondary"> Hãy đăng ký</a>
                   </Link>
                 </Form.Group>

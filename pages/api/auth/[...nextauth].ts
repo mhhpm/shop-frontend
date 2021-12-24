@@ -1,10 +1,9 @@
-import jwt from 'jsonwebtoken'
+import { asyncTryCatch } from '@utils/libs/functionalTryCatch'
+import axios from 'axios'
+import { API } from 'environment'
 import NextAuth from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 import CredentialProviders from 'next-auth/providers/credentials'
-import axios from 'axios'
-import { asyncTryCatch } from '@utils/libs/functionalTryCatch'
-import { API } from 'environment'
 
 export default NextAuth({
   providers: [
@@ -25,16 +24,24 @@ export default NextAuth({
       authorize: async (credentials) => {
         const [res] = await asyncTryCatch(() =>
           axios
-            .post(`${API}/api/auth/validate`, {
-              email: credentials?.email,
+            .post(`${API}/auth/local`, {
+              identifier: credentials?.email,
               password: credentials?.password,
             })
-            .then((res) => res.data),
+            .then((res) => res.data)
+            .then((data) => {
+              const { jwt, user } = data
+              return {
+                token: jwt,
+                ...user,
+              }
+            }),
         )
         return res
       },
     }),
   ],
+
   callbacks: {
     redirect: ({ url }) => {
       return url
@@ -45,45 +52,19 @@ export default NextAuth({
     jwt: ({ token, user }) => {
       if (user) {
         token.id = user.id
+        token.accessToken = user.token as JWT
       }
       return token
     },
     session: ({ session, token }) => {
       if (token) {
         session.id = token.id
+        session.accessToken = token.accessToken
       }
       return session
     },
   },
   secret: process.env.JWT_SECRET,
-  jwt: {
-    secret: process.env.JWT_SECRET,
-    encode: async (params) => {
-      const secret = params?.secret || ''
-      const token = params?.token || ''
-
-      const payload = Object.assign({}, token)
-
-      const encodedToken = jwt.sign(payload, secret, {
-        algorithm: 'HS256',
-      })
-
-      return encodedToken
-    },
-
-    decode: async (params) => {
-      if (!params?.token) {
-        return {}
-      }
-      const secret = params?.secret as string
-      const decodedToken = jwt.verify(params?.token, secret, {
-        algorithms: ['HS256'],
-      }) as JWT
-
-      return decodedToken
-    },
-  },
-
   pages: {
     signIn: '/auth/login',
     error: '/auth/login',
