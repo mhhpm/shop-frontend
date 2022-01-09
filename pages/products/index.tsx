@@ -14,7 +14,7 @@ import Checkbox from '@mui/material/Checkbox'
 import { useRouter } from 'next/router'
 import SelectPlaceholder from '@utils/components/SelectPlaceHolder'
 import filterSearch from '@utils/libs/filterSearch'
-import Product from '../../components/products/Product2'
+import Product from '../../components/products/Product'
 import { getProducts, getProductByURL } from '@utils/services/product'
 import { IProduct } from '@utils/types/product'
 
@@ -116,7 +116,7 @@ function DashboardContent({ products, pageSize }: IProps) {
   console.log('rerender')
 
   return (
-    <Layout title="Book Shop | Products" requireLogin={false}>
+    <Layout title="Book Shop | Sản phẩm" requireLogin={false}>
       <Container maxWidth="lg" sx={{ mt: 8, mb: 8 }}>
         <Box
           sx={{
@@ -151,14 +151,13 @@ function DashboardContent({ products, pageSize }: IProps) {
             <FormGroup sx={{ display: 'flex', flexDirection: 'row' }}>
               {selection.map((item, index) => {
                 return (
-                  <>
-                    <FormControlLabel
-                      control={
-                        <Checkbox onChange={handleSelectCategory} name={item} />
-                      }
-                      label={item}
-                    />
-                  </>
+                  <FormControlLabel
+                    key={index}
+                    control={
+                      <Checkbox onChange={handleSelectCategory} name={item} />
+                    }
+                    label={item}
+                  />
                 )
               })}
             </FormGroup>

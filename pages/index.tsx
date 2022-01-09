@@ -66,7 +66,7 @@ export default function Home() {
             </h2>
           </div>
           <Row className="g-sm-5 g-4 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-            <Col>
+            {/* <Col>
               <Product
                 name="Special Item"
                 id="1"
@@ -105,7 +105,7 @@ export default function Home() {
                 reviewPoints={5}
                 isSale={true}
               />
-            </Col>
+            </Col> */}
           </Row>
         </Container>
       </section>

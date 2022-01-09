@@ -7,17 +7,7 @@ enum Status {
 
 export interface IProduct {
   id: string
-  attributes: Base & {
-    name: string
-    price: number
-    weight: number
-    //review: string// 1-n
-    rating: number
-    quantity: number
-    status: Status
-    image: string
-    discription: string
-  }
+  attributes: Base & Product
 }
 
 interface Review {

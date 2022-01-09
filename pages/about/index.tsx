@@ -1,17 +1,13 @@
-import Banner from '@components/home/Banner'
-import Product from '@components/products/Product'
 import Layout from '@utils/components/Layout'
-import { useSession, signOut } from 'next-auth/react'
 import Image from 'next/image'
-import Link from 'next/link'
 import React from 'react'
-import { Col, Container, Row } from 'react-bootstrap'
+import { Container } from 'react-bootstrap'
 const ImgSrc1 =
   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo2ivkG_JkakIfI1GQL1BfZlQvOQlk5Tr1bA&usqp=CAU'
 
 export default function Home() {
   return (
-    <Layout title="About Us">
+    <Layout title="Book Shop | Thông tin nhóm">
       <section className="bg-dark py-5">
         <div className="px-4 px-lg-5 my-5 container">
           <div className="text-center text-white">

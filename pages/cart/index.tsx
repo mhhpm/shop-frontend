@@ -3,11 +3,10 @@ import Layout from '@utils/components/Layout'
 import { PageContainer } from '@utils/components/PageWrapper'
 import { formatVND } from '@utils/helper'
 import useCartContext from '@utils/hooks/useCartContext'
-import Image from 'next/image'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { Alert, Button, Col, Row } from 'react-bootstrap'
 import styled from 'styled-components'
-import Img from '../../assets/sach.jpg'
 
 const CartContainer = styled(PageContainer)`
   .image-col {
@@ -15,9 +14,8 @@ const CartContainer = styled(PageContainer)`
   }
 `
 
-const VAT = 10
-
-export default function Cart() {
+const VAT = 5
+function Cart() {
   const {
     cart: { cartItems },
   } = useCartContext()
@@ -48,7 +46,7 @@ export default function Cart() {
                   <Col xs={2} lg={3}>
                     Giá
                   </Col>
-                  <Col xs={2} lg={3}>
+                  <Col xs={2} lg={3} className="ps-4">
                     Số lượng
                   </Col>
                   <Col xs={1}>Xóa</Col>
@@ -57,7 +55,7 @@ export default function Cart() {
                   ({
                     product: {
                       id,
-                      attributes: { name, price },
+                      attributes: { name, price, image },
                     },
                     quantity,
                   }) => (
@@ -67,6 +65,7 @@ export default function Cart() {
                       name={name}
                       price={price}
                       quantity={quantity}
+                      image={image}
                     />
                   ),
                 )}
@@ -109,3 +108,5 @@ export default function Cart() {
     </Layout>
   )
 }
+
+export default dynamic(() => Promise.resolve(Cart), { ssr: false })

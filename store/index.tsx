@@ -1,15 +1,12 @@
+import Cookies from 'js-cookie'
 import React, { createContext, useReducer } from 'react'
-import {
-  Actions,
-  CartActionType,
-  IAppContext,
-  ICartItem,
-  IStoreState,
-} from './types'
+import { Actions, CartActionType, IAppContext, IStoreState } from './types'
 
 const initialState: IStoreState = {
   cart: {
-    cartItems: [],
+    cartItems: Cookies.get('cartItems')
+      ? JSON.parse(Cookies.get('cartItems') as string)
+      : [],
     shippingAddress: {
       street: '',
       city: '',
@@ -33,59 +30,32 @@ const reducer = (state: IStoreState, action: Actions): IStoreState => {
         (item) => item.product.id === product.id,
       )
 
-      if (existItem) {
-        const newItem: ICartItem = {
-          ...existItem,
-          quantity: existItem.quantity + 1,
-        }
-        return {
-          ...state,
-          cart: {
-            ...state.cart,
-            cartItems: state.cart.cartItems.map((item) =>
-              item.product.id !== existItem.product.id ? item : newItem,
-            ),
-          },
-        }
-      } else {
-        return {
-          ...state,
-          cart: {
-            ...state.cart,
-            cartItems: [...state.cart.cartItems, action.payload],
-          },
-        }
-      }
+      const cartItems = existItem
+        ? state.cart.cartItems.map((item) =>
+            item.product.id === existItem.product.id
+              ? { ...item, quantity: item.quantity + 1 }
+              : item,
+          )
+        : [...state.cart.cartItems, action.payload]
+
+      Cookies.set('cartItems', JSON.stringify(cartItems))
+      return { ...state, cart: { ...state.cart, cartItems } }
 
     case CartActionType.UpdateCartItem:
       const { productId, quantity } = action.payload
-      const existItemUpdate = state.cart.cartItems.find(
-        (item) => item.product.id === productId,
-      )
 
-      if (existItemUpdate) {
-        const newItemUpdate: ICartItem = {
-          ...existItemUpdate,
-          quantity,
-        }
-        return {
-          ...state,
-          cart: {
-            ...state.cart,
-            cartItems: state.cart.cartItems.map((item) =>
-              item.product.id !== existItemUpdate.product.id
-                ? item
-                : newItemUpdate,
-            ),
-          },
-        }
-      }
-      return state
+      const cartItemsUpdate = state.cart.cartItems.map((item) =>
+        item.product.id === productId ? { ...item, quantity } : item,
+      )
+      Cookies.set('cartItems', JSON.stringify(cartItemsUpdate))
+      return { ...state, cart: { ...state.cart, cartItems: cartItemsUpdate } }
+
     case CartActionType.DeleteItem:
       const productIdDelete = action.payload
       const newCartItems = state.cart.cartItems.filter(
         (item) => item.product.id !== productIdDelete,
       )
+      Cookies.set('cartItems', JSON.stringify(newCartItems))
       return { ...state, cart: { ...state.cart, cartItems: newCartItems } }
     default:
       return state

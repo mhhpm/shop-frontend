@@ -1,16 +1,14 @@
 import { formatVND } from '@utils/helper'
 import useCartContext from '@utils/hooks/useCartContext'
-import { IProduct } from '@utils/types/product'
 import Image from 'next/image'
-import { Col, Row } from 'react-bootstrap'
-import { DeleteCartItem } from 'store/actions'
+import { Col, InputGroup, Row } from 'react-bootstrap'
+import { DeleteCartItem, UpdateCartItem } from 'store/actions'
 import styled from 'styled-components'
-import Img from '../../assets/sach.jpg'
 
 type IProps = {
   id: string
   name: string
-  image?: string
+  image: string
   quantity: number
   price: number
 }
@@ -20,29 +18,57 @@ export default function CartItem({ id, name, image, quantity, price }: IProps) {
   const handleRemove = () => {
     dispatch(DeleteCartItem(id))
   }
+  const handleUpdate = (value: number) => {
+    if (value === 0) {
+      dispatch(DeleteCartItem(id))
+      return
+    }
+    dispatch(UpdateCartItem(id, value))
+  }
+
   return (
     <Row className="border-bottom border-1 py-3 align-items-center">
-      <Col xs={3} className="image-col">
-        <Image src={Img} width={50} height={50} alt="image" />
+      <Col xs={3} className="image-col ps-0">
+        <Image
+          loader={() => image}
+          src={'image'}
+          width={60}
+          height={60}
+          alt="image"
+        />
       </Col>
       <Col> {name}</Col>
       <Col xs={2} lg={3}>
         {formatVND(price)}
       </Col>
       <Col xs={2} lg={3}>
-        {quantity}
+        <div>
+          <ButtonIcon
+            className="bi bi-dash rounded"
+            onClick={() => handleUpdate(quantity - 1)}
+          />
+          <InputGroup.Text className="d-inline mx-1">
+            {quantity}
+          </InputGroup.Text>
+          <ButtonIcon
+            className="bi bi-plus rounded"
+            onClick={() => handleUpdate(quantity + 1)}
+          />
+        </div>
       </Col>
       <Col xs={1}>
-        <DeleteIcon className="bi bi-trash" onClick={handleRemove} />
+        <ButtonIcon
+          className="bi bi-trash rounded-circle"
+          onClick={handleRemove}
+        />
       </Col>
     </Row>
   )
 }
 
-const DeleteIcon = styled.i`
+const ButtonIcon = styled.i`
   cursor: pointer;
   padding: 8px;
-  border-radius: 40px;
 
   &:hover {
     background: #f8f8f8;

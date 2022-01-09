@@ -1,39 +1,25 @@
 import LoadingButton from '@utils/components/LoadingButton'
+import { formatVND } from '@utils/helper'
 import useCartContext from '@utils/hooks/useCartContext'
 import { getProduct } from '@utils/services/product'
+import { IProduct } from '@utils/types/product'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
-import { Button, Card } from 'react-bootstrap'
+import { Card } from 'react-bootstrap'
 import toast from 'react-hot-toast'
+import LinesEllipsis from 'react-lines-ellipsis'
 import { AddToCart } from 'store/actions'
 
-interface IProps {
-  id: string
-  name: string
-  image: string
-  price: number
-  reviewPoints: number
-  oldPrice?: number
-  isSale?: boolean
-}
-
-const Product = ({
-  id,
-  name,
-  image,
-  price,
-  reviewPoints,
-  oldPrice,
-  isSale,
-}: IProps) => {
+const Product = ({ id, attributes }: IProduct) => {
   const { dispatch } = useCartContext()
   const [loading, setLoading] = useState(false)
 
-  const handleAddTocart = async () => {
+  const handleAddToCart = async () => {
     try {
       setLoading(true)
       const product = await getProduct(id)
+      product.attributes.description = ''
       dispatch(AddToCart(product, 1))
     } catch (error) {
       toast.error('Có lỗi xảy ra!')
@@ -41,13 +27,14 @@ const Product = ({
       setLoading(false)
     }
   }
+
   return (
     <Card className="card h-100 ">
       <Link href={`/products/${id}`}>
         <a>
           <Image
             className="card-img-top"
-            loader={() => image}
+            loader={() => attributes.image}
             src={'image'}
             alt="..."
             width={450}
@@ -56,28 +43,22 @@ const Product = ({
         </a>
       </Link>
       <Card.Body className="px-0 pt-4 postion-relative">
-        {isSale && (
-          <div className="badge bg-warning text-white position-absolute top-0 end-0 m-1">
-            Sale
-          </div>
-        )}
         <div className="text-center">
           <Link href={`/products/${id}`}>
-            <a className="fw-bolder">{name}</a>
+            <LinesEllipsis
+              text={attributes.name}
+              maxLine="1"
+              ellipsis="..."
+              trimRight
+              basedOn="letters"
+            />
           </Link>
           <div className="d-flex gap-1 justify-content-center small text-warning my-2">
-            <div className="bi-star-fill"></div>
-            <div className="bi-star-fill"></div>
-            <div className="bi-star-fill"></div>
-            <div className="bi-star-fill"></div>
-            <div className="bi-star-fill"></div>
+            {[...Array(attributes.rating)].map((item, indx) => (
+              <div className="bi-star-fill" key={indx}></div>
+            ))}
           </div>
-          {oldPrice && (
-            <span className="text-muted text-decoration-line-through me-2">
-              ${oldPrice}
-            </span>
-          )}
-          ${price}
+          {formatVND(attributes.price)}
         </div>
       </Card.Body>
       <Card.Footer className="pt-0 pb-4 mb-2 border-top-0 bg-transparent">
@@ -85,10 +66,10 @@ const Product = ({
           <LoadingButton
             variant="outline-dark"
             className="mt-auto"
-            onClick={handleAddTocart}
             isLoading={loading}
+            onClick={handleAddToCart}
           >
-            Add to cart
+            Thêm vào giỏ hàng
           </LoadingButton>
         </div>
       </Card.Footer>
