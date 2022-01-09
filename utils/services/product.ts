@@ -8,6 +8,13 @@ export const getProducts = async () => {
   return data
 }
 
+export const getProductByURL = async (URL: string) => {
+  const { data } = await axios.get<IResponse<IProduct[]>>(
+    API + '/products' + URL,
+  )
+  return data
+}
+
 export const getProduct = async (id: string) => {
   const { data } = await axios.get<IResponse<IProduct>>(API + `/products/${id}`)
   console.log('data', data.data)

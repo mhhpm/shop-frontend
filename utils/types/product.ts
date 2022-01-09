@@ -1,5 +1,4 @@
 import { Base } from '@utils/models/base'
-
 enum Status {
   Visible = 'visible',
   Hidden = 'hidden',
@@ -38,4 +37,5 @@ interface Product {
   author: string
   discription: string
   category: string
+  description: string
 }
