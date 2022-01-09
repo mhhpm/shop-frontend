@@ -1,7 +1,12 @@
+import LoadingButton from '@utils/components/LoadingButton'
+import useCartContext from '@utils/hooks/useCartContext'
+import { getProduct } from '@utils/services/product'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Card } from 'react-bootstrap'
+import toast from 'react-hot-toast'
+import { AddToCart } from 'store/actions'
 
 interface IProps {
   id: string
@@ -22,6 +27,20 @@ const Product = ({
   oldPrice,
   isSale,
 }: IProps) => {
+  const { dispatch } = useCartContext()
+  const [loading, setLoading] = useState(false)
+
+  const handleAddTocart = async () => {
+    try {
+      setLoading(true)
+      const product = await getProduct(id)
+      dispatch(AddToCart(product, 1))
+    } catch (error) {
+      toast.error('Có lỗi xảy ra!')
+    } finally {
+      setLoading(false)
+    }
+  }
   return (
     <Card className="card h-100 ">
       <Link href={`/products/${id}`}>
@@ -63,9 +82,14 @@ const Product = ({
       </Card.Body>
       <Card.Footer className="pt-0 pb-4 mb-2 border-top-0 bg-transparent">
         <div className="text-center">
-          <Button variant="outline-dark" className="mt-auto">
+          <LoadingButton
+            variant="outline-dark"
+            className="mt-auto"
+            onClick={handleAddTocart}
+            isLoading={loading}
+          >
             Add to cart
-          </Button>
+          </LoadingButton>
         </div>
       </Card.Footer>
     </Card>

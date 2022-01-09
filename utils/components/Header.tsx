@@ -1,6 +1,6 @@
 import { HeaderData } from '@utils/data/header-data'
+import useCartContext from '@utils/hooks/useCartContext'
 import { getAvatarUrl } from '@utils/libs/helpers'
-import { IUser } from '@utils/types/user'
 import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -45,9 +45,15 @@ export const HeaderStyle = styled(Navbar)`
 const Header = () => {
   const { data: session } = useSession()
   const { pathname, push } = useRouter()
+  const {
+    cart: { cartItems },
+  } = useCartContext()
   const splitPath = useMemo(() => pathname.split('/'), [pathname])
 
-  console.log('seesion', session)
+  const countItems = () =>
+    cartItems.reduce((count, item) => count + item.quantity, 0)
+
+  console.log('cart', cartItems)
   return (
     <HeaderStyle
       bg="light"
@@ -75,11 +81,11 @@ const Header = () => {
             ))}
           </Nav>
           <div className="d-flex justify-content-center m-0 gap-2">
-            <Button variant="outline-dark">
+            <Button variant="outline-dark" onClick={() => push('/cart')}>
               <i className="bi-cart-fill me-1"></i>
               Cart
               <Badge pill bg="dark" text="white" className="ms-1">
-                0
+                {countItems()}
               </Badge>
             </Button>
             {session ? (

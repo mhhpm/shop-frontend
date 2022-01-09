@@ -18,11 +18,17 @@ export interface ICart {
 //Cart Action
 export enum CartActionType {
   AddToCart = 'cart/add',
+  UpdateCartItem = 'cart/update',
   DeleteItem = 'cart/delete',
 }
 
 export interface IAddToCartAction {
   type: CartActionType.AddToCart
+  payload: { product: IProduct; quantity: number }
+}
+
+export interface IUpdateCartItemAction {
+  type: CartActionType.UpdateCartItem
   payload: { productId: string; quantity: number }
 }
 
@@ -31,14 +37,14 @@ export interface IDeleteCartAction {
   payload: string
 }
 
-type CartActions = IAddToCartAction | IDeleteCartAction
+type CartActions = IAddToCartAction | IDeleteCartAction | IUpdateCartItemAction
 
 //Store
 
 export type Actions = CartActions
 
 export interface IStoreState {
-  cart: null | ICart
+  cart: ICart
 }
 
 export interface IAppContext {

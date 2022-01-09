@@ -1,6 +1,7 @@
 import Banner from '@components/home/Banner'
 import Product from '@components/products/Product'
 import Layout from '@utils/components/Layout'
+import { getProduct } from '@utils/services/product'
 import { GetServerSideProps } from 'next'
 import { getSession } from 'next-auth/react'
 import { Col, Container, Row } from 'react-bootstrap'
@@ -26,27 +27,7 @@ export default function Home() {
             <Col>
               <Product
                 name="Special Item"
-                id="1"
-                image={ImgSrc}
-                price={18000}
-                reviewPoints={5}
-                isSale={true}
-              />
-            </Col>
-            <Col>
-              <Product
-                name="Special Item"
-                id="1"
-                image={ImgSrc}
-                price={18000}
-                reviewPoints={5}
-                isSale={true}
-              />
-            </Col>
-            <Col>
-              <Product
-                name="Special Item"
-                id="1"
+                id="2"
                 image={ImgSrc}
                 price={18000}
                 reviewPoints={5}
@@ -63,6 +44,9 @@ export default function Home() {
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const session = await getSession({ req })
   console.log('Session', session?.accessToken)
+  try {
+    const data = await getProduct('1')
+  } catch (error) {}
   return {
     props: {},
   }
