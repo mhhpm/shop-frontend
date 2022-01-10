@@ -102,7 +102,8 @@ export async function getStaticProps({ params }) {
   const res = await fetch(`${API}/products/${params.id}`)
   const datas = await res.json()
 
-  const comments = await fetch(`${API}/reviews/${params.id}`)
+  var pa = params.id%3
+  const comments = await fetch(`${API}/reviews/${pa}`)
   const comment_data = await comments.json()
 
   return {
