@@ -5,6 +5,7 @@ import { formatVND } from '@utils/helper'
 import useCartContext from '@utils/hooks/useCartContext'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { Alert, Button, Col, Row } from 'react-bootstrap'
 import styled from 'styled-components'
 
@@ -14,11 +15,13 @@ const CartContainer = styled(PageContainer)`
   }
 `
 
-const VAT = 5
+export const VAT = 5
 function Cart() {
   const {
     cart: { cartItems },
   } = useCartContext()
+
+  const { push } = useRouter()
 
   const calcPrice = () =>
     cartItems.reduce(
@@ -97,7 +100,11 @@ function Cart() {
                   <div>Tổng </div>
                   <div>{formatVND(totalMoney)}</div>
                 </div>
-                <Button variant="warning" disabled={cartItems.length === 0}>
+                <Button
+                  variant="warning"
+                  disabled={cartItems.length === 0}
+                  onClick={() => push('/shipping')}
+                >
                   Đặt mua
                 </Button>
               </div>

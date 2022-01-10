@@ -11,7 +11,11 @@ import toast from 'react-hot-toast'
 import LinesEllipsis from 'react-lines-ellipsis'
 import { AddToCart } from 'store/actions'
 
-const Product = ({ id, attributes }: IProduct) => {
+interface IProps extends IProduct {
+  isSale?: boolean
+}
+
+const Product = ({ id, attributes, isSale }: IProps) => {
   const { dispatch } = useCartContext()
   const [loading, setLoading] = useState(false)
 
@@ -43,6 +47,11 @@ const Product = ({ id, attributes }: IProduct) => {
         </a>
       </Link>
       <Card.Body className="px-0 pt-4 postion-relative">
+        {isSale && (
+          <div className="badge bg-warning text-white position-absolute top-0 end-0 m-1">
+            Sale
+          </div>
+        )}
         <div className="text-center">
           <Link href={`/products/${id}`}>
             <LinesEllipsis

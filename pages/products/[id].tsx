@@ -1,15 +1,13 @@
-import {
-  faCartPlus,
-  faMoneyBill,
-  faStar,
-} from '@fortawesome/free-solid-svg-icons'
+import { faCartPlus, faStar } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Layout from '@utils/components/Layout'
 import { formatVND } from '@utils/helper'
+import useCartContext from '@utils/hooks/useCartContext'
 import { getProduct } from '@utils/services/product'
 import { IProduct } from '@utils/types/product'
 import { GetServerSideProps } from 'next'
-import { Container } from 'react-bootstrap'
+import { Button, Container } from 'react-bootstrap'
+import { AddToCart } from 'store/actions'
 
 function ProductDetail({
   product,
@@ -29,14 +27,18 @@ function ProductDetail({
     image,
     name,
     rating,
-    weight,
     quantity,
     price,
     category,
     author,
     description,
-    status,
   } = product.attributes
+
+  const { dispatch } = useCartContext()
+
+  const handleAddToCart = () => {
+    dispatch(AddToCart(product, 1))
+  }
 
   return (
     <Layout title="Book Shop | Chi tiết sản phẩm">
@@ -49,52 +51,38 @@ function ProductDetail({
             <div className="col">
               <h2>{name}</h2>
 
-              <div className="row d-flex  justify-content-between">
+              <h5 className="my-3" style={{ color: 'red' }}>
+                {formatVND(price)}
+              </h5>
+
+              <div className="row ">
+                <div className="col-6">
+                  <b>Số lượng:</b> {quantity}{' '}
+                </div>
                 <div className="col-2">
                   {rating}{' '}
                   <FontAwesomeIcon icon={faStar} color="orange" size="xs" />
                 </div>
-
-                <div className="col-3">
-                  <b>Weight:</b> {weight}{' '}
-                </div>
-                <div className="col">
-                  <b>Quantity:</b> {quantity}{' '}
-                </div>
               </div>
 
-              <h5 className="mt-3" style={{ color: 'red' }}>
-                {formatVND(price)}
-              </h5>
-
               <div className="mt-3">
-                <b className="mt-3">Product Detail: </b>
+                <b className="mt-3">Thông tin sách: </b>
               </div>
 
               <div className="row">
-                <div className="col-3"> Category: {category}</div>{' '}
-                <div className="col">Author: {author}</div>{' '}
+                <div className="col-6">Thể loại: {category}</div>{' '}
+                <div className="col">Tác giả: {author}</div>{' '}
               </div>
-              <div className="mt-2">Description: {description} </div>
+              <div className="mt-3">
+                <b className="mt-3">Mô tả: </b>
+              </div>
+              <div className="mt-2 text-justify">{description} </div>
 
               <div className="mt-3 d-flex ">
-                <a
-                  href="#"
-                  className="btn btn-success mr-auto"
-                  role="button"
-                  aria-disabled="true"
-                >
-                  <FontAwesomeIcon icon={faCartPlus} size="xs" /> Add To Card
-                </a>
-                <div>&nbsp;</div>
-                <a
-                  href="#"
-                  className=" btn  btn-primary"
-                  role="button"
-                  aria-disabled="true"
-                >
-                  <FontAwesomeIcon icon={faMoneyBill} size="xs" /> Buy Now
-                </a>
+                <Button variant="success" onClick={handleAddToCart}>
+                  <FontAwesomeIcon icon={faCartPlus} size="xs" /> Thêm vào giỏ
+                  hàng
+                </Button>
               </div>
             </div>
           </div>

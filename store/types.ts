@@ -6,13 +6,16 @@ export interface ICartItem {
   quantity: number
 }
 
+export interface IShipping {
+  fullName: string
+  address: string
+  city: string
+  country: string
+}
+
 export interface ICart {
   cartItems: ICartItem[]
-  shippingAddress: {
-    street: string
-    city: string
-    country: string
-  }
+  shippingAddress: IShipping
 }
 
 //Cart Action
@@ -20,6 +23,8 @@ export enum CartActionType {
   AddToCart = 'cart/add',
   UpdateCartItem = 'cart/update',
   DeleteItem = 'cart/delete',
+  ClearCartItems = 'cart/clear',
+  UpdateShippingAddress = '/cart/updateShipping',
 }
 
 export interface IAddToCartAction {
@@ -37,7 +42,21 @@ export interface IDeleteCartAction {
   payload: string
 }
 
-type CartActions = IAddToCartAction | IDeleteCartAction | IUpdateCartItemAction
+export interface IClearCartAction {
+  type: CartActionType.ClearCartItems
+}
+
+export interface IUpdateShippingAddress {
+  type: CartActionType.UpdateShippingAddress
+  payload: IShipping
+}
+
+type CartActions =
+  | IAddToCartAction
+  | IDeleteCartAction
+  | IUpdateCartItemAction
+  | IUpdateShippingAddress
+  | IClearCartAction
 
 //Store
 

@@ -7,11 +7,14 @@ const initialState: IStoreState = {
     cartItems: Cookies.get('cartItems')
       ? JSON.parse(Cookies.get('cartItems') as string)
       : [],
-    shippingAddress: {
-      street: '',
-      city: '',
-      country: '',
-    },
+    shippingAddress: Cookies.get('shippingAddress')
+      ? JSON.parse(Cookies.get('shippingAddress') as string)
+      : {
+          fullName: '',
+          city: '',
+          country: '',
+          address: '',
+        },
   },
 }
 
@@ -57,6 +60,23 @@ const reducer = (state: IStoreState, action: Actions): IStoreState => {
       )
       Cookies.set('cartItems', JSON.stringify(newCartItems))
       return { ...state, cart: { ...state.cart, cartItems: newCartItems } }
+
+    case CartActionType.ClearCartItems:
+      Cookies.remove('cartItems')
+      return {
+        ...state,
+        cart: { ...state.cart, cartItems: initialState.cart.cartItems },
+      }
+
+    case CartActionType.UpdateShippingAddress:
+      Cookies.set('shippingAddress', JSON.stringify(action.payload))
+      return {
+        ...state,
+        cart: {
+          ...state.cart,
+          shippingAddress: { ...action.payload },
+        },
+      }
     default:
       return state
   }

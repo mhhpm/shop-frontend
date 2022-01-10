@@ -2,8 +2,11 @@ import { IProduct } from '@utils/types/product'
 import {
   CartActionType,
   IAddToCartAction,
+  IClearCartAction,
   IDeleteCartAction,
+  IShipping,
   IUpdateCartItemAction,
+  IUpdateShippingAddress,
 } from './types'
 
 //Cart
@@ -30,4 +33,15 @@ export const UpdateCartItem = (
 export const DeleteCartItem = (productId: string): IDeleteCartAction => ({
   type: CartActionType.DeleteItem,
   payload: productId,
+})
+
+export const ClearCartItem = (): IClearCartAction => ({
+  type: CartActionType.ClearCartItems,
+})
+
+export const UpdateShippingAddress = (
+  info: IShipping,
+): IUpdateShippingAddress => ({
+  type: CartActionType.UpdateShippingAddress,
+  payload: info,
 })
