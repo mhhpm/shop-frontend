@@ -107,7 +107,7 @@ function Profile({ user }: any) {
               <Grid item xs={12} lg={6}>
                 <Box mb={5}>
                   <Typography variant="h6" component="h2">
-                    Username
+                    Họ tên
                   </Typography>
                   <FormControl sx={{ width: '80%' }}>
                     <OutlinedInput

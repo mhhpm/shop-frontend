@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { Badge, Button, Container, Image, Nav, Navbar } from 'react-bootstrap'
+import { ClearCartItem } from 'store/actions'
 import styled from 'styled-components'
 import Options from './options'
 import { OptionItem } from './options/style'
@@ -47,13 +48,18 @@ const Header = () => {
   const { pathname, push } = useRouter()
   const {
     cart: { cartItems },
+    dispatch,
   } = useCartContext()
   const splitPath = useMemo(() => pathname.split('/'), [pathname])
 
   const countItems = () =>
     cartItems.reduce((count, item) => count + item.quantity, 0)
 
-  console.log('cart', cartItems)
+  const handleLogout = () => {
+    dispatch(ClearCartItem())
+    signOut()
+  }
+
   return (
     <HeaderStyle
       bg="light"
@@ -63,7 +69,7 @@ const Header = () => {
     >
       <Container fluid className="px-0">
         <Navbar.Brand className="brand me-5">
-          <Link href="/">Book Shop</Link>
+          <Link href="/">Love book</Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -107,7 +113,7 @@ const Header = () => {
                     </OptionItem>
                   </Link>
                   {/* <hr className="border mb-1 border-secondary" /> */}
-                  <OptionItem onClick={() => signOut()}>
+                  <OptionItem onClick={handleLogout}>
                     <i className="bi bi-box-arrow-right fs-5 me-3" /> Đăng xuất
                   </OptionItem>
                 </Options>
