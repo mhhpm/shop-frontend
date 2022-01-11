@@ -1,4 +1,10 @@
 export interface IUser {
-  name: string
+  id: number
+  username: string
   email: string
+  provider: string
+  confirmed: boolean
+  blocked: boolean
+  updatedAt: Date
+  createdAt: Date
 }
