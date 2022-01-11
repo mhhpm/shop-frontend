@@ -173,7 +173,7 @@ function DashboardContent({ products, pageSize }: IProps) {
               handleChange={handleChange}
             />
           </Box>
-          {bookList.length > 0 ? (
+          {bookList?.length > 0 ? (
             <>
               <Grid mt={1} container spacing={3}>
                 {bookList.map((book: IProduct) => (
