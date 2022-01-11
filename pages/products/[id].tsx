@@ -9,14 +9,30 @@ import ProductDetailPage from '@utils/components/ProductDetail'
 import { text } from 'stream/consumers'
 import React, {useState} from 'react'
 
-
+function ReviewList({datas}){
+  
+return (
+  <div class="mb-2">
+    {datas.data.attributes.reviews.data.map(item =>
+      <div>
+        <div class="px-2" style={{ color: 'orange', fontWeight: 'bold' }}>
+              Guest
+              </div>
+              <div class="px-4 mb-2">   {item.attributes.content}</div>
+      </div>
+      
+              )}
+              
+              
+            </div>
+)
+}
 
 function addComment(hoten,noidung){
   
  
 ReactDOM.render(<Comment hoten={hoten} noidung={noidung}/>, document.getElementById('con_id'));
 }
-
 
 
 function ProductDetail({ datas, comment_data }) {
@@ -73,14 +89,16 @@ function ProductDetail({ datas, comment_data }) {
               <h5 style={{ color: 'Highlight' }}> Nhận Xét:</h5>
             </div>
 
+{/* 
             <div class="mb-3">
               <div class="px-2" style={{ color: 'orange', fontWeight: 'bold' }}>
                 Guest
               </div>
               <div class="px-4"> {comment_data.data.attributes.content}</div>
-            </div>
+            </div> */}
 
-            <div id="con_id"></div>
+<ReviewList datas={datas} />
+            <div class="mt-0" id="con_id"></div>
           </div>
         </div>
       </section>
@@ -99,12 +117,14 @@ function ProductDetail({ datas, comment_data }) {
 }
 
 export async function getStaticProps({ params }) {
-  const res = await fetch(`${API}/products/${params.id}`)
+  const res = await fetch(`${API}/products/${params.id}/?populate=reviews`)
   const datas = await res.json()
 
   var pa = params.id%3
   const comments = await fetch(`${API}/reviews/${pa}`)
   const comment_data = await comments.json()
+
+ 
 
   return {
     props: { datas, comment_data },
