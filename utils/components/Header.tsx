@@ -100,7 +100,7 @@ const Header = () => {
                   }
                   className="position-relative user mx-2"
                 >
-                  <Link href={`/user/${session.id}`}>
+                  <Link href={`/profile`}>
                     <OptionItem>
                       <i className="bi bi-person-lines-fill fs-5 me-3" /> Hồ sơ
                       của tôi

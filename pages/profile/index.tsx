@@ -1,23 +1,22 @@
-import * as React from 'react'
-import Layout from '@utils/components/Layout'
-import Box from '@mui/material/Box'
-import Container from '@mui/material/Container'
-import Typography from '@mui/material/Typography'
-import Grid from '@mui/material/Grid'
-import Button from '@mui/material/Button'
-import IconButton from '@mui/material/IconButton'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import InputAdornment from '@mui/material/InputAdornment'
-import FormHelperText from '@mui/material/FormHelperText'
-import FormControl from '@mui/material/FormControl'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import getConfig from 'next/config'
-import { getSession } from 'next-auth/react'
-import { GetServerSideProps } from 'next'
-import toast from 'react-hot-toast'
-import { getUser } from '@utils/services/user'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import Container from '@mui/material/Container'
+import FormControl from '@mui/material/FormControl'
+import FormHelperText from '@mui/material/FormHelperText'
+import Grid from '@mui/material/Grid'
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
+import OutlinedInput from '@mui/material/OutlinedInput'
+import Typography from '@mui/material/Typography'
+import Layout from '@utils/components/Layout'
 import { forgetPassword } from '@utils/services/updateInfo'
+import { getUser } from '@utils/services/user'
+import { GetServerSideProps } from 'next'
+import { getSession } from 'next-auth/react'
+import * as React from 'react'
+import toast from 'react-hot-toast'
 
 interface State {
   showPassword: boolean
@@ -84,7 +83,7 @@ function Profile({ user }: any) {
   }
 
   return (
-    <Layout title="Book Shop | Profile" requireLogin={true}>
+    <Layout title="Book Shop | Hồ sơ cá nhân" requireLogin={true}>
       <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>
         <Box mb={4}>
           <Typography variant="h4" component="h2">
